@@ -142,8 +142,7 @@ func (s *scheduler) schedule(job Job, interval time.Duration) {
 }
 
 func (s *scheduler) run(job Job) {
-	execute := job.Executable()
-	if err := execute(s.ctx); err != nil {
+	if err := job.Run(s.ctx); err != nil {
 		s.logger.Errorf(s.ctx, "failed to finish job: %s, %v", job.Name(), err)
 	}
 }

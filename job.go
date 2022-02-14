@@ -8,7 +8,7 @@ import (
 //be executed in the background
 type Job interface {
 	Name() string
-	Executable() func(ctx context.Context) error
+	Run(ctx context.Context) error
 }
 
 type job struct {
@@ -20,8 +20,8 @@ func (j *job) Name() string {
 	return j.name
 }
 
-func (j *job) Executable() func(ctx context.Context) error {
-	return j.exe
+func (j *job) Run(ctx context.Context) error {
+	return j.exe(ctx)
 }
 
 //NewJob creates new job
