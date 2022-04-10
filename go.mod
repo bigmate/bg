@@ -1,4 +1,4 @@
-module github.com/bigmate/background
+module github.com/bigmate/bg
 
 go 1.17
 

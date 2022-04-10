@@ -1,4 +1,4 @@
-package background
+package bg
 
 import (
 	"time"
@@ -38,4 +38,8 @@ func Periodic(d time.Duration) Strategy {
 		p.interval = d
 		p.idx = periodic
 	}
+}
+
+func NoDelay() Strategy {
+	return Delayed(0)
 }
