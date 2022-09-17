@@ -16,7 +16,7 @@ type testLogger struct {
 
 func newTestLogger() testLogger { return testLogger{info: make(chan string)} }
 
-func (t testLogger) Infof(_ context.Context, msg string, args ...interface{}) {
+func (t testLogger) Infof(msg string, args ...interface{}) {
 	t.info <- fmt.Sprintf(msg, args...)
 }
 

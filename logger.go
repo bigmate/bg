@@ -1,17 +1,12 @@
 package bg
 
-import (
-	"context"
-)
-
 type Logger interface {
-	Errorf(ctx context.Context, msg string, args ...interface{})
-	Infof(ctx context.Context, msg string, args ...interface{})
+	Errorf(format string, args ...interface{})
+	Infof(format string, args ...interface{})
 }
 
-type noopLogger struct {
-}
+type noopLogger struct{}
 
-func (n noopLogger) Errorf(ctx context.Context, msg string, args ...interface{}) {}
+func (noopLogger) Errorf(format string, args ...interface{}) {}
 
-func (n noopLogger) Infof(ctx context.Context, msg string, args ...interface{}) {}
+func (noopLogger) Infof(format string, args ...interface{}) {}

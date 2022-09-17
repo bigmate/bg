@@ -60,7 +60,7 @@ func NewScheduler(ctx context.Context, options ...Option) Scheduler {
 
 	sch.run = func(job Job) {
 		if err := job.Run(sch.ctx); err != nil {
-			sch.logger.Errorf(sch.ctx, "failed to finish job: %s, %v", job.Name(), err)
+			sch.logger.Errorf("failed to finish job: %s, %v", job.Name(), err)
 		}
 	}
 
@@ -142,7 +142,7 @@ func (s *scheduler) runAfter(job Job, delay time.Duration) {
 		case <-tm.C:
 			s.run(job)
 		case <-ch:
-			s.logger.Infof(s.ctx, "%s got exit signal", job.Name())
+			s.logger.Infof("%s got exit signal", job.Name())
 		}
 
 		s.mx.Lock()
@@ -179,7 +179,7 @@ func (s *scheduler) schedule(job Job, interval time.Duration) {
 			case <-tck.C:
 				s.run(job)
 			case <-ch:
-				s.logger.Infof(s.ctx, "%s got exit signal", job.Name())
+				s.logger.Infof("%s got exit signal", job.Name())
 				return
 			}
 		}
