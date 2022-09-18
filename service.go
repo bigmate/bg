@@ -28,6 +28,7 @@ type scheduler struct {
 	ctx           context.Context
 	cancelCtx     func()
 	logger        Logger
+	adder         closer.Adder
 	run           func(job Job)
 	delayedJobs   map[string]*timerChanPair
 	scheduledJobs map[string]*tickerChanPair
@@ -47,6 +48,12 @@ func WithRunner(runner func(job Job)) Option {
 	}
 }
 
+func WithAdder(adder closer.Adder) Option {
+	return func(s *scheduler) {
+		s.adder = adder
+	}
+}
+
 //NewScheduler returns Scheduler
 func NewScheduler(ctx context.Context, options ...Option) Scheduler {
 	ctx, cancel := context.WithCancel(ctx)
@@ -54,6 +61,7 @@ func NewScheduler(ctx context.Context, options ...Option) Scheduler {
 		ctx:           ctx,
 		cancelCtx:     cancel,
 		logger:        noopLogger{},
+		adder:         closer.Global(),
 		delayedJobs:   make(map[string]*timerChanPair),
 		scheduledJobs: make(map[string]*tickerChanPair),
 	}
@@ -68,7 +76,7 @@ func NewScheduler(ctx context.Context, options ...Option) Scheduler {
 		apply(sch)
 	}
 
-	closer.Add(func() error {
+	sch.adder.Add(func() error {
 		sch.stop()
 		return nil
 	})
